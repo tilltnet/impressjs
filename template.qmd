@@ -1,0 +1,159 @@
+---
+title: Using impress.js with Quarto
+subtitle: Make those slides swirl
+date: last-modified
+author: Till Krenz
+abstract: The other day over on [stackoverflow](https://stackoverflow.com/q/77146042/4821142) [user113156](https://stackoverflow.com/users/6447399/) asked if there is a way to create [Impress.js](https://github.com/impress/impress.js) presentations with Quarto. I created a [minimal example](https://stackoverflow.com/a/77146457/4821142) of a `qmd` file that renders into a impress.js presentation. To make the process more easy, I created a Quarto extension. So now you can get started with your prezi-style presentations with Quarto by simply installing the impress.js extension.  
+format: 
+  impressjs-html
+execute: 
+  echo: false
+---
+
+::: {#overview-start .step data-scale=3}
+
+:::
+
+
+::: {#textseq1a .step data-x="1500"}
+
+You can have **sequences of text blocks**.
+
+:::
+
+::: {#textseq1b .step data-x="2200" data-rotate="90" .big}
+
+That rotate.
+
+:::
+
+::: {#textseq1c .step data-x="1500" data-y="700" data-rotate="540" }
+
+[And swirl around.]{.big}
+
+:::
+
+::: {#textseq1d .step data-x="1500" data-y="-700" data-rotate-x="45"  data-max-scale="3" data-min-scale="0"}
+
+[So.]{.big}
+[Cool.]{.big .substep}
+[😎]{.big .substep}
+
+:::
+
+
+::: {#slide1a .step .slide data-x="0" data-y="-1000"  data-rotate-z="0"}
+
+You can have r output on slides.
+
+```{r}
+#| fig.height: 6
+#| message: false
+library(tidyverse)
+library(ggplot2)
+
+mtcars |> 
+  as_tibble(rownames = "car") |> 
+  ggplot() +
+  geom_col(aes(reorder(car, disp), disp, fill = disp)) +
+  scale_fill_continuous(type = "viridis") +
+  coord_flip() +
+  theme_minimal() +
+  labs(y = "displacement")
+```
+
+:::
+
+::: {#slidebehindslide1a .step .slide data-y="-1000" data-scale=".1" data-z="-1000"}
+
+And slides with more R output - **behind** your slides.
+
+```{r}
+mtcars |> 
+  as_tibble(rownames = "car") |> 
+  mutate(angle = (qsec - min(qsec)) / (max(qsec) - min(qsec)) * 180 - 90) |> 
+  ggplot(aes(disp, qsec, label = car)) +
+  geom_point(aes(color = -qsec)) +
+  scale_color_continuous(type = "viridis") +
+  coord_flip() +
+  geom_text(aes(angle = angle), size = 2, hjust = -.1) +
+  theme_minimal() +
+  labs(x = "displacement", y = "time to travel 1/4 mile")
+```
+
+:::
+
+
+::: {#wait .step .slide data-x="-15500" data-y="-1000" data-scale="10"}
+
+[But wait!]{.big}
+This just in...
+
+:::
+
+
+::: {#breaking .step .slide data-x="-15500" data-y="-1050" data-rotate="5000" data-scale="0.1" data-z="1000"}
+
+[BREAKING NEWS!]{.medium}
+
+Building [Quarto Extensions](https://quarto.org/docs/extensions/) is fun! You should [build your own](https://quarto.org/docs/extensions/creating.html), explore other extensions and [check out](https://github.com/mcanouil/awesome-quarto#contents) presentations, articles, and more created with Quarto and its extensions.
+<br><br>
+Now back to Quarto and impress.js.
+
+:::
+
+::: {#noslideR .step data-y="-1000" data-x="-1500" data-rotate-x="360"}
+
+R output can also be in a non-slide step.
+
+```{r}
+#| classes: .substep
+library(gt)
+
+mtcars |> 
+  summarise(across(disp:qsec, mean), .by = cyl) |> 
+  gt() |> 
+  fmt_number(decimals = 1)
+```
+:::
+
+
+::: {#manual1 .step data-y="0" data-x="-1500"}
+
+## How To add and animate steps?
+
+<br>
+
+Use div fences `:::` in your quarto file and add the `.step` class.
+
+[Add the `.substep` class to an element to successively show substeps.]{.substep}
+
+[Use `data-x`, `data-y`, `data-z` `data-rotate`, `data-scale`, ... to position and arrange steps.]{.substep}
+
+:::
+
+
+::: {#manual2 .step data-y="1000" data-x="-1500"}
+
+## Install & Configure
+
+- `quarto install ...`
+
+- add your content
+
+- edit css
+
+:::
+
+::: {#end .step data-y="1000" data-x="0"}
+
+That's it!
+
+[The End.]{.big .substep}
+
+:::
+
+
+::: {#overview-end .step data-scale=3 data-x="0" data-y="0"}
+
+:::

@@ -1,0 +1,20 @@
+title: impressjs
+author: tilltnet
+version: 1.0.0
+quarto-required: ">=1.3.0"
+contributes:
+  formats:
+    html:
+      template: impressjs-template.html
+      include-after-body:
+        - text: |
+            <script src="_extensions/impressjs/resources/js/impress.js"></script>
+            <script>impress().init()</script>
+      css: 
+        - resources/css/impress-common.css
+        - resources/css/impress-demo.css
+      variables:
+        impress-url: _extensions/impressjs/resources
+      to:
+        html5
+      section-divs: true
